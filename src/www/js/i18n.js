@@ -30,6 +30,8 @@ const messages = { // eslint-disable-line no-unused-vars
     donate: 'Donate',
     toggleCharts: 'Show/hide Charts',
     theme: { dark: 'Dark theme', light: 'Light theme', auto: 'Auto theme' },
+    enableRouter: 'Enable Router Mode',
+    disableRouter: 'Disable Router Mode',
   },
   ua: {
     name: 'Ім`я',
@@ -57,6 +59,8 @@ const messages = { // eslint-disable-line no-unused-vars
     downloadConfig: 'Завантажити конфігурацію',
     madeBy: 'Зроблено',
     donate: 'Пожертвувати',
+    enableRouter: 'Увімкнути режим роутера',
+    disableRouter: 'Вимкнути режим роутера',
   },
   ru: {
     name: 'Имя',

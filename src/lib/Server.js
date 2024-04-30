@@ -185,6 +185,14 @@ module.exports = class Server {
         await WireGuard.enableClient({ clientId });
         return { success: true };
       }))
+      .post('/api/wireguard/client/:clientId/toggle-is-router', defineEventHandler(async (event) => {
+        const clientId = getRouterParam(event, 'clientId');
+        if (clientId === '__proto__' || clientId === 'constructor' || clientId === 'prototype') {
+          throw createError({ status: 403 });
+        }
+        await WireGuard.toggleClientIsRouter({ clientId });
+        return { success: true };
+      }))
       .post('/api/wireguard/client/:clientId/disable', defineEventHandler(async (event) => {
         const clientId = getRouterParam(event, 'clientId');
         if (clientId === '__proto__' || clientId === 'constructor' || clientId === 'prototype') {

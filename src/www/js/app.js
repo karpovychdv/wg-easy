@@ -284,6 +284,11 @@ new Vue({
         .catch((err) => alert(err.message || err.toString()))
         .finally(() => this.refresh().catch(console.error));
     },
+    toggleClientIsRouter(client) {
+        this.api.toggleClientIsRouter({ clientId: client.id })
+            .catch((err) => alert(err.message || err.toString()))
+            .finally(() => this.refresh().catch(console.error));
+    },
     disableClient(client) {
       this.api.disableClient({ clientId: client.id })
         .catch((err) => alert(err.message || err.toString()))

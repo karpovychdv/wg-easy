@@ -115,6 +115,13 @@ class API {
     });
   }
 
+  async toggleClientIsRouter({ clientId }) {
+    return this.call({
+      method: 'post',
+      path: `/wireguard/client/${clientId}/toggle-is-router`,
+    });
+  }
+
   async disableClient({ clientId }) {
     return this.call({
       method: 'post',

@@ -104,14 +104,14 @@ PostDown = ${WG_POST_DOWN}
 
     for (const [clientId, client] of Object.entries(config.clients)) {
       if (!client.enabled) continue;
-
+      const cidr = client.isRouter ? 24 : 32;
       result += `
 
 # Client: ${client.name} (${clientId})
 [Peer]
 PublicKey = ${client.publicKey}
 ${client.preSharedKey ? `PresharedKey = ${client.preSharedKey}\n` : ''
-}AllowedIPs = ${client.address}/32`;
+}AllowedIPs = ${client.address}/${cidr}`;
     }
 
     debug('Config saving...');
@@ -146,6 +146,7 @@ ${client.preSharedKey ? `PresharedKey = ${client.preSharedKey}\n` : ''
       latestHandshakeAt: null,
       transferRx: null,
       transferTx: null,
+      isRouter: client.isRouter,
     }));
 
     // Loop WireGuard status
@@ -195,11 +196,11 @@ ${client.preSharedKey ? `PresharedKey = ${client.preSharedKey}\n` : ''
   async getClientConfiguration({ clientId }) {
     const config = await this.getConfig();
     const client = await this.getClient({ clientId });
-
+    const cidr = client.isRouter ? 16 : 24;
     return `
 [Interface]
 PrivateKey = ${client.privateKey ? `${client.privateKey}` : 'REPLACE_ME'}
-Address = ${client.address}/24
+Address = ${client.address}/${cidr}
 ${WG_DEFAULT_DNS ? `DNS = ${WG_DEFAULT_DNS}\n` : ''}\
 ${WG_MTU ? `MTU = ${WG_MTU}\n` : ''}\
 
@@ -283,6 +284,15 @@ Endpoint = ${WG_HOST}:${WG_PORT}`;
     const client = await this.getClient({ clientId });
 
     client.enabled = true;
+    client.updatedAt = new Date();
+
+    await this.saveConfig();
+  }
+
+  async toggleClientIsRouter({ clientId }) {
+    const client = await this.getClient({ clientId });
+
+    client.isRouter = !client.isRouter;
     client.updatedAt = new Date();
 
     await this.saveConfig();
